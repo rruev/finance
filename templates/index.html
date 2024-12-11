@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <div class='mb-3'>
+        <span class='border border-dark p-2'>
+            {{ user }} balance: <strong style="color: green">{{ cash | usd}}</strong> total_value: <strong style="color: green">{{ (total_value + cash) | usd}}</strong>
+        </span>
+    </div>
+    <div class="mb-3">
+        <h3 id="noStocks" style="display: none">You don't own any stocks</h3>
+        <button class='btn btn-success' type='button' onclick='redirectBuy(this, "")'>Buy stocks now</button>
+    </div>
+    <div class='mb-3'>
+        <table class="table" id="thisTable">
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Shares</th>
+                    <th>Current price</th>
+                    <th>Value</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                {% for purchase in purchases %}
+                    <tr>
+                        <td>{{ lookup(purchase.stock)["name"] }}</td>
+                        <td>{{ purchase.quantity }}</td>
+                        <td>{{ (price[loop.index - 1]) | usd}}</td>
+                        <td style="color: green">{{ (purchase.quantity * (price[loop.index - 1])) | usd}}</td>
+                        <td>
+                            <button class='btn btn-success' type='button' onclick='redirectBuy(this, "{{ lookup(purchase.stock)["symbol"] }}")'>Buy more</button>
+                        </td>
+                        <td>
+                            <button class='btn btn-dark' type='button' onclick='redirectSell(this, "{{ lookup(purchase.stock)["symbol"] }}")'>Sell</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </thead>
+        </table>
+    </div>
+    <script>
+        if (document.getElementsByTagName("tr").length == 1) {
+        document.getElementById("thisTable").style.visibility = "hidden";
+        document.getElementById("noStocks").style.display = "block";
+    }
+    </script>
+{% endblock %}

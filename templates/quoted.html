@@ -1,0 +1,28 @@
+{% extends "quote.html" %}
+
+{% block title %}
+    Quoted
+{% endblock %}
+
+{% block prices %}
+        <table class="table" id="thisTable">
+            <tr>
+                <th scope="col">Stock</th>
+                <th scope="col">Price</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for stock in stocks %}
+                <tr>
+                    <td>{{ stock.name }}</td>
+                    <td>{{ stock.price | usd }}</td>
+                    <td>
+                        <button class='btn btn-success' type='button' onclick='redirectBuy(this, "{{ stock.symbol }}")'>Buy</button>
+                    </td>
+                    <td>
+                        <button class='btn btn-primary' type='button' onclick='removeElement(this, "{{ stock.symbol }}")'>Hide</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
